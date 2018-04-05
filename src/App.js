@@ -34,24 +34,7 @@ class App extends Component {
         this.state.coinList = coinList;
       })
       .then(res => {
-        cc
-          .priceFull(
-            ["BTC", "ETH", "ICX", "IOST", "ADA", "VEN", "BNB", "CTR", "TRX"],
-            ["USD", "BTC"]
-          )
-          .then(prices => {
-            prices = Object.keys(prices).map(function(key) {
-              return {
-                coin: key,
-                usd: this[key].USD.PRICE,
-                btc: this[key].BTC.PRICE,
-                changepct: this[key].USD.CHANGEPCT24HOUR,
-                mcap: this[key].USD.MKTCAP
-              };
-            }, prices);
-            this.setState({ prices });
-          })
-          .catch(console.error);
+        this.fetchPrices(false);
       })
       .catch(console.error);
   }
@@ -84,7 +67,7 @@ class App extends Component {
     });
   };
 
-  onClick(e) {
+  fetchPrices(refresh) {
     const { column, prices, direction, coinList } = this.state;
     cc
       .priceFull(
@@ -102,29 +85,37 @@ class App extends Component {
           };
         }, prices);
         this.setState({ prices });
-        this.setState({
-          prices: prices.sort(function(a, b) {
-            let item1 = a[column];
-            let item2 = b[column];
-            if (item1 < item2) {
-              return -1;
-            }
-            if (item1 > item2) {
-              return 1;
-            }
-            return 0;
-          })
-        });
 
-        // sort method always return list in ascending order
-        // this cond ensures the user's prefer state remain unchanged
-        if (direction === "descending") {
+        if (refresh) {
           this.setState({
-            prices: prices.reverse()
+            prices: prices.sort(function(a, b) {
+              let item1 = a[column];
+              let item2 = b[column];
+              if (item1 < item2) {
+                return -1;
+              }
+              if (item1 > item2) {
+                return 1;
+              }
+              return 0;
+            })
           });
+
+          // sort method always return list in ascending order
+          // this cond ensures the user's prefer state remain unchanged
+          if (direction === "descending") {
+            this.setState({
+              prices: prices.reverse()
+            });
+          }
         }
       })
       .catch(console.error);
+  }
+
+  onClick(e) {
+    const refresh = true;
+    fetchPrices(refresh);
   }
 
   render() {
