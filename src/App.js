@@ -54,22 +54,6 @@ class App extends Component {
           .catch(console.error);
       })
       .catch(console.error);
-    cc
-      .topPairs("BTC", 5)
-      .then(pairs => {
-        console.log(pairs);
-        // -> [ { exchange: 'CCCAGG',
-        //        fromSymbol: 'BTC',
-        //        toSymbol: 'JPY',
-        //        volume24h: 235602.43493487104,
-        //        volume24hTo: 31888554862.766888 },
-        //      { exchange: 'CCCAGG',
-        //        fromSymbol: 'BTC',
-        //        toSymbol: 'USD',
-        //        volume24h: 124504.4477389583,
-        //        volume24hTo: 145514032.93780443 } ]
-      })
-      .catch(console.error);
   }
 
   handleSort = clickedColumn => () => {
