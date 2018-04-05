@@ -115,7 +115,7 @@ class App extends Component {
 
   onClick(e) {
     const refresh = true;
-    fetchPrices(refresh);
+    this.fetchPrices(refresh);
   }
 
   render() {
